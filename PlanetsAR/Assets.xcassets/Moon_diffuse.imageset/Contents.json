@@ -2,12 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "2k_sun.png",
+      "filename" : "2k_moon.jpg",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "sun.jpg",
       "scale" : "2x"
     },
     {
