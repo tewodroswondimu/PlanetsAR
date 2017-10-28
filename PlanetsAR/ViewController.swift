@@ -24,42 +24,63 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        let earthNode = SCNNode()
-        earthNode.geometry = SCNSphere(radius: 0.2)
+        // Create an earth node
+        let earthNode = planet(geometry: SCNSphere(radius: 0.2), diffuse: #imageLiteral(resourceName: "Earth Day"), specular:  #imageLiteral(resourceName: "Earth Specular"), emission: #imageLiteral(resourceName: "Earth Clouds"), normal: #imageLiteral(resourceName: "Earth Normal"), position: SCNVector3(1.2,0,0))
+        
+        // Create the other planet node
+        let venusNode = planet(geometry: SCNSphere(radius: 0.1), diffuse: #imageLiteral(resourceName: "Venus_diffuse"), specular:  nil, emission: #imageLiteral(resourceName: "Venus_atmosphere"), normal: nil, position: SCNVector3(0.7,0,0))
+        /*
+        let mercuryNode = planet(geometry: SCNSphere(radius: 0.1), diffuse: #imageLiteral(resourceName: "Mercury_diffuse"), specular: nil, emission: nil, normal: nil, position: <#T##SCNVector3#>)
+        let marsNode = planet(geometry: <#T##SCNGeometry#>, diffuse: #imageLiteral(resourceName: "Mars_diffuse"), specular: nil, emission: nil, normal: nil, position: <#T##SCNVector3#>)
+        let jupiterNode = planet(geometry: <#T##SCNGeometry#>, diffuse: #imageLiteral(resourceName: "Jupiter_diffuse"), specular: nil, emission: nil, normal: nil, position: <#T##SCNVector3#>)
+        let saturnNode = planet(geometry: <#T##SCNGeometry#>, diffuse: #imageLiteral(resourceName: "Saturn_diffuse"), specular: nil, emission: nil, normal: nil, position: <#T##SCNVector3#>)
+        let uranusNode = planet(geometry: <#T##SCNGeometry#>, diffuse: #imageLiteral(resourceName: "Uranus_diffuse"), specular: nil, emission: nil, normal: nil, position: <#T##SCNVector3#>)
+        let neptuneNode = planet(geometry: <#T##SCNGeometry#>, diffuse: #imageLiteral(resourceName: "Neptune_diffuse"), specular: nil, emission: nil, normal: nil, position: <#T##SCNVector3#>)*/
+        
+        let sunNode = SCNNode()
+        sunNode.geometry = SCNSphere(radius: 0.35)
+        
+        sunNode.geometry?.firstMaterial?.diffuse.contents = #imageLiteral(resourceName: "Sun_diffuse")
+        sunNode.position = SCNVector3(0, 0, -1)
+        self.sceneView.scene.rootNode.addChildNode(sunNode)
+        
+        sunNode.addChildNode(earthNode)
+        sunNode.addChildNode(venusNode)
+    }
+    
+    func planet(geometry: SCNGeometry, diffuse: UIImage, specular: UIImage?, emission: UIImage?, normal: UIImage?, position: SCNVector3) -> SCNNode
+    {
+        let planetNode = SCNNode()
+        
+        planetNode.geometry = geometry;
+        
         // Apply a texture of earth to the earth node
         // The texture for earth can be found at www.solarsystemscope.com/Textures
         // Once the image has been added to the Assets (New Image Set)
         // Set the asset to the diffuse
-        earthNode.geometry?.firstMaterial?.diffuse.contents = #imageLiteral(resourceName: "Earth Day");
+        planetNode.geometry?.firstMaterial?.diffuse.contents = diffuse;
         
         // To have the earth reflect light we need to use a specular map
         // The texture for the specular map can also be found at www.solarsystemscope.com/Textures
         // Specular is the color of light that's reflected from the node
         // When the texture is applied to the earth, only the oceans reflect light
         // Apply the asset to the specular
-        earthNode.geometry?.firstMaterial?.specular.contents = #imageLiteral(resourceName: "Earth Specular")
+        planetNode.geometry?.firstMaterial?.specular.contents = specular
         
         // To place clouds over the earth you use an emission map
         // This adds color or content to a surface
         // Apply the asset to the emissions
-        earthNode.geometry?.firstMaterial?.emission.contents = #imageLiteral(resourceName: "Earth Clouds")
+        planetNode.geometry?.firstMaterial?.emission.contents = emission
         
         // To show the contours of the land we can add the earth normal
         // This can also be downloaded from the same website
         // Apply the asset to the normal
-        earthNode.geometry?.firstMaterial?.normal.contents = #imageLiteral(resourceName: "Earth Normal")
+        planetNode.geometry?.firstMaterial?.normal.contents = normal
         
-        earthNode.position = SCNVector3(0,0,-1)
-        self.sceneView.scene.rootNode.addChildNode(earthNode)
+        // set the position of the planet relative to the sun
+        planetNode.position = position
         
-        // animate the earth along it's x axis and set duration to 8s
-        // SCNAction is similar to eulerangles an animation class that animates the change in structure or
-        // display of a node, in this case it is animating the rotation
-        let action = SCNAction.rotateBy(x: 0, y: CGFloat(360.degreesToRadians), z: 0, duration: 8)
-        
-        // to make the roation last forever
-        let foreverAction = SCNAction.repeatForever(action)
-        earthNode.runAction(foreverAction)
+        return planetNode;
     }
 
     override func didReceiveMemoryWarning() {
