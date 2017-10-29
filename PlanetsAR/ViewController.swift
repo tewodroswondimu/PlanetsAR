@@ -40,7 +40,7 @@ class ViewController: UIViewController {
         print("The names of the planets are \(earthNode.name), \(venusNode.name), \(mercuryNode.name), , \(marsNode.name), \(jupiterNode.name), \(String(describing: saturnNode.name)), \(uranusNode.name) and \(neptuneNode.name)")
         
         let sunNode = SCNNode()
-        sunNode.geometry = SCNSphere(radius: 0.695)
+        sunNode.geometry = SCNSphere(radius: 0.40)
         
         sunNode.geometry?.firstMaterial?.diffuse.contents = #imageLiteral(resourceName: "Sun_diffuse")
         sunNode.position = SCNVector3(0, 0, -1)
